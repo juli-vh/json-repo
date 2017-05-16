@@ -4,7 +4,7 @@
 #2)Create emypty storage if it need it
 #3)Create database file to track changes
 
-# coment
+# coment added
 def download_dependences():
     #check if dependencies not installed->install it
     pass
