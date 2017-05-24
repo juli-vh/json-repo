@@ -1,10 +1,36 @@
+from flask import Flask, request, render_template, redirect
+import os
+import shelve
+
+app=Flask(__name__)
+@app.route('/file', methods=['GET', 'POST'])
+def index():
+    if request.method=='GET':
+        return render_template('file_form.html')
+
+    elif request.method =='POST':
+        file=request.files['file_input']
+
+        print(request.form['filetag'])
+        print(file.filename)
+
+        filepath = os.path.join('media', file.filename)
+        file.save(filepath)
+
+
+
+
+    return redirect ('/file')
+
+if __name__=='__main__':
+    app.run(debug=True)
+
 
 #TODO:
 #1)download all python packages
 #2)Create emypty storage if it need it
 #3)Create database file to track changes
 
-# coment added
 def download_dependences():
     #check if dependencies not installed->install it
     pass
