@@ -6,7 +6,7 @@ app=Flask(__name__)
 @app.route('/file', methods=['GET', 'POST'])
 def index():
     if request.method=='GET':
-        return render_template('file_form.html')
+        return render_template('file_1.html')
 
     elif request.method =='POST':
         file=request.files['file_input']
@@ -17,13 +17,8 @@ def index():
         filepath = os.path.join('media', file.filename)
         file.save(filepath)
 
-
-
-
     return redirect ('/file')
 
-if __name__=='__main__':
-    app.run(debug=True)
 
 
 #TODO:
@@ -49,3 +44,4 @@ if __name__ == "__main__":
     download_dependences()
     initialize_env()
     run_application()
+    app.run(debug=True)
