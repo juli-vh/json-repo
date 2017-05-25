@@ -9,13 +9,16 @@ import subprocess
 
 def download_dependences():
     #check if dependencies not installed->install it
-
     subprocess.run(['pip', 'install', '-r', 'requirements.txt'])
 
 
 def initialize_env():
     #create directory, where we will save storage
     #create db file->shelve lib
+
+
+
+
     pass
 
 def run_application():
