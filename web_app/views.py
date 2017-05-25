@@ -16,13 +16,8 @@ def get_storage_stat():
 
 def download_file(tag):
     #get file_content from request_obj
-    print(request)
-    return Response(response="should be opened dialog to download file",
-                    status=200)
 
-
-def upload_files(tag):
-    return Response(response="should upload file or files with specific tag")
+return Response(response="should upload file or files with specific tag")
 
 
 def update_file(tag):
