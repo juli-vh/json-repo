@@ -1,30 +1,6 @@
-from flask import Flask, request, render_template, redirect
 import os
 import shelve
-
-app=Flask(__name__)
-@app.route('/file', methods=['GET', 'POST'])
-def index():
-    if request.method=='GET':
-        return render_template('file_1.html')
-
-    if request.method == 'POST':
-        book_data = {
-            'name': request.form['book_name'],
-            'writer': request.form['book_writer'],
-            'price': request.form['book_price'],
-        }
-        with shelve.open(DBNAME) as db:
-            if 'books' in db:
-                db['books'] += [product_data]
-            else:
-                db['books'] = [product_data]
-
-        file = request.files['book_image']
-        file.save(os.path.join(app.config['MEDIA_BOOK'], os.path.basename(file.filename)))
-
-        return redirect('/list-book')
-
+import subprocess
 
 #TODO:
 #1)download all python packages
@@ -33,7 +9,8 @@ def index():
 
 def download_dependences():
     #check if dependencies not installed->install it
-    pass
+
+    subprocess.run(['pip', 'install', '-r', 'requirements.txt'])
 
 
 def initialize_env():
@@ -49,4 +26,3 @@ if __name__ == "__main__":
     download_dependences()
     initialize_env()
     run_application()
-    app.run(debug=True)
