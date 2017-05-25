@@ -8,17 +8,22 @@ def index():
     if request.method=='GET':
         return render_template('file_1.html')
 
-    elif request.method =='POST':
-        file=request.files['file_input']
+    if request.method == 'POST':
+        book_data = {
+            'name': request.form['book_name'],
+            'writer': request.form['book_writer'],
+            'price': request.form['book_price'],
+        }
+        with shelve.open(DBNAME) as db:
+            if 'books' in db:
+                db['books'] += [product_data]
+            else:
+                db['books'] = [product_data]
 
-        print(request.form['filetag'])
-        print(file.filename)
+        file = request.files['book_image']
+        file.save(os.path.join(app.config['MEDIA_BOOK'], os.path.basename(file.filename)))
 
-        filepath = os.path.join('media', file.filename)
-        file.save(filepath)
-
-    return redirect ('/file')
-
+        return redirect('/list-book')
 
 
 #TODO:
