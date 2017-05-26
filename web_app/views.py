@@ -25,6 +25,7 @@ def download_file(tag):
         filename = request.files['file_1.html']
         return filename
     if request.method=='POST':
+        filetag=request.files['filetag']
 
 
 
