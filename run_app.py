@@ -1,5 +1,4 @@
 import os
-import shelve
 import subprocess
 
 #TODO:

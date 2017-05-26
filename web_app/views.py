@@ -1,6 +1,11 @@
 from flask import Response
-from flask import request
+from flask import request, Flask, render_template, redirect
+import shelve
 
+app = Flask(__name__)
+app.config['MEDIA_FOLDER'] = 'media'
+
+DBNAME='shelve_lib'
 
 def get_project_info():
     response_text = "<b>Hi. It's simple json repository based on Flask. Enjoy it.</b>"
@@ -16,6 +21,13 @@ def get_storage_stat():
 
 def download_file(tag):
     #get file_content from request_obj
+    if request.method == 'GET':
+        filename = request.files['file_1.html']
+        return filename
+    if request.method=='POST':
+
+
+
     print(request)
     return Response(response="should be opened dialog to download file",
                     status=200)
