@@ -15,11 +15,11 @@ def download_dependences():
 def initialize_env():
     #create directory, where we will save storage
     #create db file->shelve lib
+    if os.path.isdir('media'):
+        print('directory "media" created')
+    else:
+        os.mkdir('media')
 
-
-
-
-    pass
 
 def run_application():
     from web_app import application
