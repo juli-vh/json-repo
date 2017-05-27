@@ -1,9 +1,11 @@
 from flask import Response
 from flask import request, Flask, render_template, redirect
 import shelve
+import os
 
 app = Flask(__name__)
-app.config['MEDIA_FOLDER'] = 'media'
+UPLOAD_FOLDER = '/home/yulia/PycharmProjects/untitled/json_repository-master/media'
+app.config['UPLOAD_FOLDER'] = 'media'
 
 DBNAME='shelve_lib'
 
@@ -25,22 +27,28 @@ def download_file(tag):
         filename = request.files['file_1.html']
         return filename
     if request.method=='POST':
-        filetag=request.files['filetag']
+        file=request.files['download_file']
+        real_file=file.filename
+        upload_data = {'filename': file.filename,
+                      'real_file': real_file}
+
+    filepath = os.path.join('media', real_file)
+    file.save(filepath)
+
+    filetag=request.form['filetag']
+    with shelve.open(DBNAME) as db:
+        if filetag in db:
+            db[filetag] += upload_data
+        else:
+            db[filetag] = upload_data
+
+    return redirect('/storage/files/')
 
 
-
-    print(request)
-    return Response(response="should be opened dialog to download file",
-                    status=200)
-
-
-@app.route('/upload', methods=['GET', 'POST'])
 def upload_files(tag):
-     if request.method == 'POST':
-         f = request.files['file_1']
-         f.save('/json_repository-master/uploads/uploaded_file.txt')
-
-return Response(response="should upload file or files with specific tag")
+         with shelve.open(DBNAME) as db:
+             tag_files = db.get('filetag', [])
+         return render_template('tag_list.html', filetag=tag_files)
 
 
 def update_file(tag):
