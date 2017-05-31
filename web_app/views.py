@@ -10,21 +10,18 @@ app.config['UPLOAD_FOLDER'] = 'media'
 DBNAME='shelve_lib'
 
 def get_project_info():
-    response_text = "<b>Hi. It's simple json repository based on Flask. Enjoy it.</b>"
-    return Response(response=response_text,
-                    status=200)
-
+    greeting_text = 'Hi, User! It\'s simple json repository based on Flask. Enjoy it'
+    return render_template("index.html", text_block=greeting_text)
 
 def get_storage_stat():
-    return Response(response=[{'<path_to_file>:<tag>'}],
-                    status=200,
-                    mimetype="application/json")
-
+    if request.method == 'GET':
+        with shelve.open(DBNAME) as db:
+            return render_template('storage_stat.html', db=db)
 
 def download_file(tag):
     #get file_content from request_obj
     if request.method == 'GET':
-        filename = request.files['file_1.html']
+        filename = request.files['download.html']
         return filename
     if request.method=='POST':
         file=request.files['download_file']
@@ -35,22 +32,44 @@ def download_file(tag):
     filepath = os.path.join('media', real_file)
     file.save(filepath)
 
-    filetag=request.form['filetag']
+
+    filetag=request.form['tag']
+
     with shelve.open(DBNAME) as db:
         if filetag in db:
-            db[filetag] += upload_data
+            db[tag] += upload_data
         else:
-            db[filetag] = upload_data
+            db[tag] = upload_data
 
     return redirect('/storage/files/')
 
 
 def upload_files(tag):
          with shelve.open(DBNAME) as db:
-             tag_files = db.get('filetag', [])
-         return render_template('tag_list.html', filetag=tag_files)
+             tag_files = db.get('tag', [])
+         return render_template('tag_list.html', filetag=tag_files, tag=tag)
 
 
-def update_file(tag):
-    #get file_content from request_obj
-    return Response(response="should update file by specific tag")
+def update_file(tag, filename):
+    if request.method == 'GET':
+        with shelve.open(DBNAME) as db:
+            if tag in db:
+                tags = True
+            else:
+                tags = tag
+            file_name = False
+            real_file = False
+
+            for file in db[tag]:
+                if file['filename'] == filename:
+
+                    file_name = filename
+                    real_file = file['real_file']
+                    break
+
+        return render_template('update_tag_list.html',
+                               tag=tags, filename=file_name, realfile=real_file)
+    elif request.method == 'POST':
+
+        return redirect('/storage/stat/')
+
