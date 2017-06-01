@@ -54,9 +54,9 @@ def update_file(tag, filename):
     if request.method == 'GET':
         with shelve.open(DBNAME) as db:
             if tag in db:
-                tags = True
+                tag = True
             else:
-                tags = tag
+                tag = tag
             file_name = False
             real_file = False
 
@@ -68,7 +68,7 @@ def update_file(tag, filename):
                     break
 
         return render_template('update_tag_list.html',
-                               tag=tags, filename=file_name, realfile=real_file)
+                               tag=tag, filename=file_name, realfile=real_file)
     elif request.method == 'POST':
 
         return redirect('/storage/stat/')
