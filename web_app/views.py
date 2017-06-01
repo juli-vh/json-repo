@@ -54,7 +54,7 @@ def update_file(tag, filename):
     if request.method == 'GET':
         with shelve.open(DBNAME) as db:
             if tag in db:
-                tag = False
+                tag = True
             else:
                 tag = tag
             file_name = False
